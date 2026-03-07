@@ -103,6 +103,50 @@ async function main() {
   });
 
   console.log('Dompet default dibuat');
+
+  // Quest: Misi Periode (recurring tiap tanggal 3, durasi 2 minggu)
+  await prisma.quest.upsert({
+    where: { id: 'quest-misi-periode' },
+    update: {
+      recurringDay: 3,
+      durationDays: 14,
+    },
+    create: {
+      id: 'quest-misi-periode',
+      title: 'Misi Periode',
+      isRecurring: true,
+      recurringDay: 3,
+      durationDays: 14,
+      createdBy: jed.id,
+      items: {
+        create: [
+          {
+            id: 'qi-rajin-mencatat',
+            name: 'Rajin Mencatat',
+            description: 'Catat minimal 15 transaksi',
+            type: 'transaction_count',
+            targetValue: 15,
+          },
+          {
+            id: 'qi-investasi-masa-depan',
+            name: 'Investasi Masa Depan',
+            description: 'Selisih masuk-keluar minimal Rp 500 rb',
+            type: 'income_expense_diff',
+            targetValue: 500000,
+          },
+          {
+            id: 'qi-panen-rezeki',
+            name: 'Panen Rezeki',
+            description: 'Dana masuk periode ini capai Rp 1 jt',
+            type: 'total_income',
+            targetValue: 1000000,
+          },
+        ],
+      },
+    },
+  });
+
+  console.log('Quest seed dibuat');
   console.log('Seeding selesai!');
   console.log('');
   console.log('Akun untuk login:');

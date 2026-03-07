@@ -12,6 +12,7 @@ import budgetRoutes from './routes/budget.routes';
 import recurringRoutes from './routes/recurring.routes';
 import dashboardRoutes from './routes/dashboard.routes';
 import reportRoutes from './routes/report.routes';
+import questRoutes from './routes/quest.routes';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -30,6 +31,7 @@ app.use('/api/budgets', budgetRoutes);
 app.use('/api/recurring', recurringRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/reports', reportRoutes);
+app.use('/api/quests', questRoutes);
 
 // Health check
 app.get('/health', (_req, res) => {

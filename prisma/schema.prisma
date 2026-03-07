@@ -46,6 +46,7 @@ model User {
   transactions         Transaction[]
   budgets              Budget[]
   recurringTransactions RecurringTransaction[]
+  quests               Quest[]
 
   @@map("users")
 }
@@ -124,6 +125,46 @@ model Budget {
 
   @@unique([categoryId, month, year])
   @@map("budgets")
+}
+
+enum QuestItemType {
+  transaction_count
+  income_expense_diff
+  total_income
+  total_expense
+}
+
+model Quest {
+  id           String      @id @default(uuid())
+  title        String
+  startDate    DateTime?
+  endDate      DateTime?
+  isRecurring  Boolean     @default(false)
+  recurringDay Int?
+  durationDays Int?
+  createdBy    String
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  user         User        @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  items        QuestItem[]
+
+  @@map("quests")
+}
+
+model QuestItem {
+  id          String        @id @default(uuid())
+  questId     String
+  name        String
+  description String
+  type        QuestItemType
+  targetValue Float
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  quest       Quest         @relation(fields: [questId], references: [id], onDelete: Cascade)
+
+  @@map("quest_items")
 }
 
 model RecurringTransaction {
